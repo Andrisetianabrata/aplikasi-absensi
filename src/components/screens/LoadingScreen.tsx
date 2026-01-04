@@ -1,5 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, StatusBar } from 'react-native';
+import { THEME } from '../../theme/theme';
+import { Zap } from 'lucide-react-native';
 
 interface Props {
   message?: string;
@@ -8,16 +10,16 @@ interface Props {
 export function LoadingScreen({ message = 'Loading...' }: Props) {
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#0F172A" />
+      <StatusBar barStyle="light-content" backgroundColor={THEME.colors.primary} />
 
       {/* Logo */}
       <View style={styles.logoContainer}>
-        <Text style={styles.logoText}>⚡</Text>
+        <Zap size={40} color="#FFF" fill="#FFF" />
       </View>
 
       <Text style={styles.appName}>Volta</Text>
 
-      <ActivityIndicator size="large" color="#4F46E5" style={styles.spinner} />
+      <ActivityIndicator size="large" color="#FFF" style={styles.spinner} />
 
       <Text style={styles.message}>{message}</Text>
     </View>
@@ -27,37 +29,35 @@ export function LoadingScreen({ message = 'Loading...' }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0F172A',
+    backgroundColor: THEME.colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
   },
   logoContainer: {
-    width: 100,
-    height: 100,
+    width: 80,
+    height: 80,
     borderRadius: 24,
-    backgroundColor: '#1E293B',
+    backgroundColor: 'rgba(255,255,255,0.2)',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: '#334155',
-  },
-  logoText: {
-    fontSize: 48,
+    borderColor: 'rgba(255,255,255,0.3)',
   },
   appName: {
     fontSize: 32,
     fontWeight: '700',
-    color: '#F8FAFC',
+    color: '#FFFFFF',
     marginBottom: 40,
-    letterSpacing: 2,
+    letterSpacing: 1,
   },
   spinner: {
     marginBottom: 20,
   },
   message: {
-    color: '#64748B',
+    color: 'rgba(255,255,255,0.8)',
     fontSize: 14,
+    fontWeight: '500',
   },
 });

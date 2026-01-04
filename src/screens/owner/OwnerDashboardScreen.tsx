@@ -1,19 +1,43 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, RefreshControl, Alert } from 'react-native';
 import { THEME } from '../../theme/theme';
-import { Users, CheckCircle, Clock, AlertTriangle, ChevronRight } from 'lucide-react-native';
+import { Users, CheckCircle, Clock, AlertTriangle, ChevronRight, LogOut } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ownerService } from '../../services/api/client';
 import { useAuth } from '../../contexts/AuthContext';
+import { useSnackbar } from '../../contexts/SnackbarContext';
 import { LoadingScreen } from '../../components/screens/LoadingScreen';
 
 export function OwnerDashboardScreen({ navigation }: any) {
-  const { companies, user } = useAuth();
+  const { companies, user, logout } = useAuth();
+  const { showSnackbar } = useSnackbar();
   const companyId = companies.find(c => c.is_owner)?.company_id;
 
   const [data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+
+  const handleLogout = () => {
+    Alert.alert(
+      'Logout',
+      'Are you sure you want to logout?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Logout',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await logout();
+              showSnackbar('Logged out successfully', 'success');
+            } catch (error) {
+              showSnackbar('Failed to logout', 'error');
+            }
+          }
+        },
+      ]
+    );
+  };
 
   const fetchDashboard = async () => {
     if (!companyId) return;
@@ -68,8 +92,13 @@ export function OwnerDashboardScreen({ navigation }: any) {
             <Text style={styles.greeting}>Good Morning,</Text>
             <Text style={styles.name}>{user?.name} (Owner)</Text>
           </View>
-          <View style={styles.avatar}>
-            <Text style={styles.avatarText}>{user?.name?.charAt(0)}</Text>
+          <View style={styles.headerRight}>
+            <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+              <LogOut size={20} color={THEME.colors.status.danger} />
+            </TouchableOpacity>
+            <View style={styles.avatar}>
+              <Text style={styles.avatarText}>{user?.name?.charAt(0)}</Text>
+            </View>
           </View>
         </View>
 
@@ -183,6 +212,21 @@ const styles = StyleSheet.create({
     fontSize: THEME.fonts.sizes.l,
     fontWeight: 'bold',
     color: THEME.colors.text.primary,
+  },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  logoutButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#FEF2F2',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#FAC7C7',
   },
   avatar: {
     width: 48,

@@ -1,5 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, StatusBar } from 'react-native';
+import { THEME } from '../../theme/theme';
+import { ShieldCheck, Camera, MapPin } from 'lucide-react-native';
 
 interface PermissionReason {
   icon: string;
@@ -20,7 +22,7 @@ export function PermissionRequestScreen({ title, description, reasons, onRequest
 
       {/* Shield Icon */}
       <View style={styles.iconContainer}>
-        <Text style={styles.iconEmoji}>🛡️</Text>
+        <ShieldCheck size={56} color={THEME.colors.primary} />
       </View>
 
       <Text style={styles.title}>{title}</Text>
@@ -29,9 +31,13 @@ export function PermissionRequestScreen({ title, description, reasons, onRequest
       <View style={styles.reasonsContainer}>
         {reasons.map((reason, index) => (
           <View key={index} style={styles.reasonRow}>
-            <Text style={styles.reasonIcon}>
-              {reason.icon === 'camera' ? '📷' : '📍'}
-            </Text>
+            <View style={styles.reasonIconBox}>
+              {reason.icon === 'camera' ? (
+                <Camera size={24} color={THEME.colors.primary} />
+              ) : (
+                <MapPin size={24} color={THEME.colors.primary} />
+              )}
+            </View>
             <Text style={styles.reasonText}>{reason.text}</Text>
           </View>
         ))}
@@ -53,35 +59,30 @@ export function PermissionRequestScreen({ title, description, reasons, onRequest
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0F172A',
+    backgroundColor: THEME.colors.background,
     padding: 24,
     justifyContent: 'center',
     alignItems: 'center',
   },
   iconContainer: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    backgroundColor: '#1E293B',
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: '#EEF2FF',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 32,
-    borderWidth: 2,
-    borderColor: '#334155',
-  },
-  iconEmoji: {
-    fontSize: 56,
   },
   title: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: '700',
-    color: '#F8FAFC',
+    color: THEME.colors.text.primary,
     marginBottom: 12,
     textAlign: 'center',
   },
   description: {
     fontSize: 16,
-    color: '#94A3B8',
+    color: THEME.colors.text.secondary,
     textAlign: 'center',
     lineHeight: 24,
     marginBottom: 32,
@@ -94,55 +95,55 @@ const styles = StyleSheet.create({
   reasonRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 16,
-    paddingHorizontal: 20,
-    backgroundColor: '#1E293B',
+    padding: 16,
+    backgroundColor: '#FFF',
     borderRadius: 16,
     marginBottom: 12,
-    borderWidth: 1,
-    borderColor: '#334155',
+    ...THEME.shadows.small,
   },
-  reasonIcon: {
-    fontSize: 24,
+  reasonIconBox: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    backgroundColor: '#F1F5F9',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginRight: 16,
   },
   reasonText: {
     flex: 1,
-    fontSize: 15,
-    color: '#E2E8F0',
-    lineHeight: 22,
+    fontSize: 14,
+    color: THEME.colors.text.primary,
+    lineHeight: 20,
+    fontWeight: '500',
   },
   infoBox: {
-    backgroundColor: 'rgba(79, 70, 229, 0.15)',
+    backgroundColor: '#F8FAFC',
     paddingVertical: 14,
     paddingHorizontal: 18,
     borderRadius: 12,
     marginBottom: 32,
     borderWidth: 1,
-    borderColor: 'rgba(79, 70, 229, 0.3)',
+    borderColor: '#E2E8F0',
   },
   infoText: {
-    color: '#A5B4FC',
-    fontSize: 13,
+    color: THEME.colors.text.secondary,
+    fontSize: 12,
     textAlign: 'center',
-    lineHeight: 20,
+    lineHeight: 18,
   },
   button: {
-    backgroundColor: '#4F46E5',
+    backgroundColor: THEME.colors.primary,
     paddingVertical: 18,
     paddingHorizontal: 48,
-    borderRadius: 14,
+    borderRadius: 16,
     width: '100%',
-    shadowColor: '#4F46E5',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.4,
-    shadowRadius: 16,
-    elevation: 8,
+    ...THEME.shadows.medium,
   },
   buttonText: {
     color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: 16,
+    fontWeight: 'bold',
     textAlign: 'center',
   },
 });
